@@ -8,7 +8,7 @@ services:
   app:
     image: docker.vocr.vn/dori_app:latest
     ports:
-      - "8002:80"
+      - "80:80"
     volumes:
       - ./dist:/app/dist
   api:
@@ -18,8 +18,8 @@ services:
     environment:
       - NAME=FastAPIApp
       - OCR_ENGINE_HOST=http://ocr_engine:8080
-      - DATA_HOME=/app/uploaded_files/ #/app/projects
-      - FILE_HOST=${FILE_HOST}
+      - DATA_HOME=/app/uploaded_files/
+      - FILE_HOST=http://103.98.149.149:8000
       - REDIS_HOST=redis
       - EMAIL_USERNAME=${EMAIL_USERNAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
