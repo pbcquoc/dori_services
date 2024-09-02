@@ -45,9 +45,8 @@ services:
       - redis-data:/data
 
   celery:
-    build: .
+    image: docker.vocr.vn/celery:latest
     container_name: "celery"
-    image: celery
     command: celery -A tasks worker --loglevel=info --concurrency=1 --max-tasks-per-child=10
     depends_on:
       - redis
