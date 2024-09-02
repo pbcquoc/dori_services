@@ -1,0 +1,59 @@
+volumes:
+  postgres_data:
+    driver: local  # This uses the local storage driver
+  redis-data:
+    driver: local
+
+services:
+  app:
+    image: docker.vocr.vn/dori_app:latest
+    ports:
+      - "8002:80"
+    volumes:
+      - ./dist:/app/dist
+  api:
+    image: docker.vocr.vn/dori_api:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - NAME=FastAPIApp
+      - OCR_ENGINE_HOST=http://ocr_engine:8080
+      - DATA_HOME=/app/uploaded_files/ #/app/projects
+      - FILE_HOST=${FILE_HOST}
+      - REDIS_HOST=redis
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+    restart: unless-stopped
+  db:
+    image: postgres
+    container_name: postgres
+    ports:
+      - 5432:5432
+    restart: always
+    shm_size: 64mb
+    environment:
+      POSTGRES_PASSWORD: a6suzyh2V1jKrYX
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis: # for celery
+    image: "redis:latest"
+    container_name: "redis"
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  celery:
+    build: .
+    container_name: "celery"
+    image: celery
+    command: celery -A tasks worker --loglevel=info --concurrency=1 --max-tasks-per-child=10
+    depends_on:
+      - redis
+    environment:
+      - SSH_PASSWORD=${SSH_PASSWORD}
+      - REDIS_HOST=redis
+      - LOGGER_API=${LOGGER_API}
+    volumes:
+      - .:/app
