@@ -10,8 +10,12 @@ services:
     container_name: app
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./dist:/app/dist
+      - /data/quocpbc/cert/:/cert
+    depends_on:
+      - api
   api:
     image: docker.vocr.vn/dori_api:latest
     container_name: api
@@ -21,11 +25,17 @@ services:
       - NAME=FastAPIApp
       - OCR_ENGINE_HOST=http://ocr_engine:8080
       - DATA_HOME=/app/uploaded_files/
-      - FILE_HOST=http://103.98.149.149:8000
+      - FILE_HOST=https://dori.vocr.vn/api
       - REDIS_HOST=redis
       - EMAIL_USERNAME=${EMAIL_USERNAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - APP_HOME=https://dori.vocr.vn
+      - ENV=prod
+      - POSTGRES_HOST=db
     restart: unless-stopped
+    depends_on:
+      - db
+      - celery
   db:
     image: postgres
     container_name: postgres
@@ -34,7 +44,9 @@ services:
     restart: always
     shm_size: 64mb
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: a6suzyh2V1jKrYX
+      POSTGRES_DB: dori
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
