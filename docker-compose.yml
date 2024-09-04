@@ -13,7 +13,7 @@ services:
       - "443:443"
     volumes:
       - ./dist:/app/dist
-      - /data/quocpbc/cert/:/cert
+      - ./cert/:/cert
     depends_on:
       - api
   api:
