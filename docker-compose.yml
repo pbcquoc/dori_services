@@ -69,5 +69,3 @@ services:
       - REDIS_HOST=redis
       - LOGGER_API=${LOGGER_API}
     restart: unless-stopped
-    volumes:
-      - .:/app
