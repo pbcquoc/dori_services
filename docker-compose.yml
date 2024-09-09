@@ -55,7 +55,5 @@ services:
     depends_on:
       - redis
     environment:
-      - SSH_PASSWORD=${SSH_PASSWORD}
       - REDIS_HOST=redis
-      - LOGGER_API=${LOGGER_API}
     restart: unless-stopped
