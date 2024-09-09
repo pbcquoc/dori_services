@@ -29,15 +29,14 @@ services:
   db:
     image: postgres
     container_name: postgres
+    env_file: ${ENV_FILE}
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:5432
     restart: unless-stopped
     shm_size: 64mb
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: a6suzyh2V1jKrYX
-      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
-      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
       POSTGRES_DB: dori
     volumes:
       - postgres_data:/var/lib/postgresql/data
