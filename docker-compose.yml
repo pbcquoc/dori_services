@@ -31,7 +31,7 @@ services:
     container_name: postgres
     env_file: ${ENV_FILE}
     ports:
-      - 5433:5432
+      - 5432:5432
     restart: unless-stopped
     shm_size: 64mb
     environment:
