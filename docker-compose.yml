@@ -34,6 +34,8 @@ services:
     ports:
       - 3000:3000
     restart: unless-stopped
+    depends_on:
+      - landing_page_backend
   landing_page_backend:
     image: docker.vocr.vn/landing_page_backend:latest
     container_name: landing_page_backend
