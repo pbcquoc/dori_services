@@ -34,7 +34,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      NEXT_PUBLIC_BASE_URL: http://landing_page_backend:8000/data
+      NEXT_PUBLIC_BASE_URL: https://dori.vocr.vn/data
     restart: unless-stopped
     depends_on:
       - landing_page_api
