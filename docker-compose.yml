@@ -22,10 +22,24 @@ services:
     env_file: ${ENV_FILE}
     ports:
       - "8000:8000"
+    volumes:
+      - ./uploaded_files/:/app/uploaded_files/
     restart: unless-stopped
     depends_on:
       - db
       - celery
+  landing_page:
+    image: docker.vocr.vn/dori_landing_page:latest
+    container_name: landing_page
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+  landing_page_backend:
+    image: docker.vocr.vn/landing_page_backend:latest
+    container_name: landing_page_backend
+    ports:
+      - 8003:8000
+    restart: unless-stopped
   db:
     image: postgres
     container_name: postgres
